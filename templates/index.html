@@ -1,5 +1,3 @@
-<!-- File: templates/index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +23,7 @@
         <h1>BugsWriter - Premium Course</h1>
         <div class="product">
             <div class="product-name">Mastering Web Development</div>
-            <div class="product-price">₹1,999.00 INR</div>
+            <div class="product-price">~$24.00 USD</div>
             <p>Unlock advanced web development techniques and build robust applications with this comprehensive video course. Designed for developers who want to deepen their skills and create stunning web experiences.</p>
         </div>
 
@@ -33,15 +31,16 @@
         <div id="payment-message" class="message"></div>
     </div>
 
-    <!-- PayPal JavaScript SDK -->
-    <!-- REPLACE YOUR_PAYPAL_CLIENT_ID_HERE with your actual PayPal Client ID -->
-    <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency=INR"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency=USD"></script>
 
     <script>
         // These details would typically come from a database or configuration
         const productId = 'web-dev-course-001';
-        const productPrice = '1999.00';
-        const productCurrency = 'INR';
+        // IMPORTANT: Change this price to an actual USD value.
+        // I've put a placeholder here, assuming 1999 INR is roughly 24 USD.
+        // You'll need to decide your exact USD price.
+        const productPrice = '24.00'; 
+        const productCurrency = 'USD'; // Changed to USD
         const productName = 'Mastering Web Development Course';
 
         paypal.Buttons({
@@ -61,7 +60,7 @@
                     body: JSON.stringify({
                         productId: productId,
                         price: productPrice,
-                        currency: productCurrency,
+                        currency: productCurrency, // Now USD
                         name: productName
                     })
                 }).then(response => {

@@ -48,11 +48,11 @@ def create_paypal_order(product_details):
         "intent": "CAPTURE",
         "purchase_units": [{
             "amount": {
-                "currency_code": product_details['currency'],
+                "currency_code": product_details['currency'], # This will now be USD
                 "value": product_details['price'],
                 "breakdown": {
                     "item_total": {
-                        "currency_code": product_details['currency'],
+                        "currency_code": product_details['currency'], # This will now be USD
                         "value": product_details['price']
                     }
                 }
@@ -63,7 +63,7 @@ def create_paypal_order(product_details):
                 "description": f"Access to {product_details['name']}",
                 "quantity": "1",
                 "unit_amount": {
-                    "currency_code": product_details['currency'],
+                    "currency_code": product_details['currency'], # This will now be USD
                     "value": product_details['price']
                 },
                 "category": "DIGITAL_GOODS" # Important for digital products
@@ -105,8 +105,6 @@ def capture_paypal_order(order_id):
 @app.route('/')
 def index():
     """Renders the main checkout page."""
-    # You could dynamically pass product details here if needed,
-    # but for minimal, we'll keep product details on the frontend JS
     return render_template('index.html', paypal_client_id=PAYPAL_CLIENT_ID)
 
 @app.route('/api/create-paypal-order', methods=['POST'])
@@ -117,6 +115,8 @@ def api_create_paypal_order():
         order = create_paypal_order(data)
         return jsonify(order)
     except Exception as e:
+        # It's good to log the full exception details in a real app
+        app.logger.error(f"Error in api_create_paypal_order: {e}") 
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/capture-paypal-order', methods=['POST'])
@@ -130,6 +130,7 @@ def api_capture_paypal_order():
         capture_response = capture_paypal_order(order_id)
         return jsonify(capture_response)
     except Exception as e:
+        app.logger.error(f"Error in api_capture_paypal_order: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/paypal-webhook', methods=['POST'])
@@ -169,10 +170,6 @@ def paypal_webhook():
         #    (You'd use an email sending library/service like SendGrid, Mailgun, etc.)
         
         app.logger.info(f"ACTION: Granting access to content for: {payer_email} for order {order_id}")
-        # Example: Simulating content access grant
-        # with open('purchased_content_access.log', 'a') as f:
-        #     f.write(f"Access granted for {payer_email} to content for order {order_id} at {datetime.now()}\n")
-        # send_content_email(payer_email, order_id) # Placeholder for your email function
 
     elif event_type == 'PAYMENT.REFUND.COMPLETED':
         order_id = webhook_event['resource']['id']
