@@ -1,5 +1,3 @@
-# File: app.py
-
 import os
 from flask import Flask, render_template, request, jsonify
 import requests
@@ -198,7 +196,4 @@ def cancel_page():
     return "<h1>Payment Cancelled</h1><p>You have cancelled the payment. No charges were made.</p>"
 
 if __name__ == '__main__':
-    # For local development:
-    # Ensure FLASK_ENV is set to 'development' in your .env or shell
-    # Set your host to '0.0.0.0' to be accessible from outside localhost if needed
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='127.0.0.1', port=6000)
